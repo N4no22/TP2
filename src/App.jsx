@@ -1,9 +1,9 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, Container, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import axios from "axios";
 
 const API_KEY = "f49ac22fbf134f2aba2230225240806";
-
 const urlAPI = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&lang=es&q=`;
 
 export default function App() {
@@ -42,6 +42,17 @@ export default function App() {
         icon: data.current.condition.icon,
         conditionText: data.current.condition.text,
       });
+
+      // Guardar historial de búsqueda
+      await axios.post("http://localhost:5000/save-search", {
+        city: data.location.name,
+        country: data.location.country,
+        temp: data.current.temp_c,
+        condition: data.current.condition.text,
+        icon: data.current.condition.icon,
+        conditionText: data.current.condition.text,
+      });
+
     } catch (error) {
       console.log(error);
       setError({
